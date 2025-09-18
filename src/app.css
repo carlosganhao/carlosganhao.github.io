@@ -2,6 +2,88 @@
 @import "tailwindcss";
 
 @theme {
+  --color-coral-100: oklch(0.9668 0.0203125 30);
+  --color-coral-200: oklch(0.9224 0.05156250000000002 30);
+  --color-coral-300: oklch(0.8623 0.09531250000000001 30);
+  --color-coral-400: oklch(0.8027 0.14375000000000004 30);
+  --color-coral-500: oklch(0.7266 0.21562500000000007 30);
+  --color-coral-600: oklch(0.6299 0.28125 30);
+  --color-coral-700: oklch(0.5347 0.23906250000000004 30);
+  --color-coral-800: oklch(0.4146 0.184375 30);
+  --color-coral-900: oklch(0.2964 0.13125000000000003 30);
+
+  --color-avocado-100: oklch(0.9546 0.12500000000000003 127);
+  --color-avocado-200: oklch(0.8975 0.2703125 127);
+  --color-avocado-300: oklch(0.834 0.25 127);
+  --color-avocado-400: oklch(0.7715 0.23125000000000007 127);
+  --color-avocado-500: oklch(0.6909 0.20781250000000007 127);
+  --color-avocado-600: oklch(0.5991 0.1796875 127);
+  --color-avocado-700: oklch(0.5117 0.153125 127);
+  --color-avocado-800: oklch(0.4019 0.12031250000000003 127);
+  --color-avocado-900: oklch(0.2944 0.08750000000000001 127);
+
+  --color-azure-100: oklch(0.9551 0.07500000000000001 195);
+  --color-azure-200: oklch(0.8936 0.18281250000000002 195);
+  --color-azure-300: oklch(0.8262 0.18906250000000002 195);
+  --color-azure-400: oklch(0.7637 0.17500000000000002 195);
+  --color-azure-500: oklch(0.7637 0.17500000000000002 195);
+  --color-azure-600: oklch(0.5928 0.13437500000000002 195);
+  --color-azure-700: oklch(0.5059 0.11562500000000003 195);
+  --color-azure-800: oklch(0.396 0.09062500000000001 195);
+  --color-azure-900: oklch(0.2896 0.06562500000000002 195);
+
+  --color-byzantium-100: oklch(0.9678 0.028125000000000004 340);
+  --color-byzantium-200: oklch(0.9258 0.06718750000000001 340);
+  --color-byzantium-300: oklch(0.8682 0.12656250000000002 340);
+  --color-byzantium-400: oklch(0.811 0.1921875 340);
+  --color-byzantium-500: oklch(0.7383 0.28750000000000003 340);
+  --color-byzantium-600: oklch(0.6367 0.30624999999999997 340);
+  --color-byzantium-700: oklch(0.541 0.25937499999999997 340);
+  --color-byzantium-800: oklch(0.4194 0.20156250000000006 340);
+  --color-byzantium-900: oklch(0.3008 0.14375000000000004 340);
+
+  --default-font-family: "Lexend Deca", sans-serif; 
+  --font-header: "Special Gothic Expanded One", sans-serif;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@layer components {
+  .root {
+    @apply flex flex-col h-full select-none overflow-clip;
+  }
+
+  .body {
+    @apply grid grid-cols-2 grow mt-9 mx-12 mb-7 gap-4;
+  }
+
+  .link {
+    @apply underline decoration-azure-200 text-sky-50 hover:decoration-byzantium-500 hover:text-byzantium-200 hover:drop-shadow-md hover:drop-shadow-byzantium-500/50 transition duration-300;
+  }
+
+  .link-btn {
+    @apply px-3 py-1 border-azure-200 border-1 text-neutral-100 hover:border-byzantium-600 hover:bg-byzantium-800/50 hover:text-byzantium-100 transition duration-300;
+  }
+
+  .btn {
+    @apply cursor-pointer px-3 py-1 border-azure-200 border-1 text-neutral-100 hover:border-byzantium-600 hover:bg-byzantium-800/50 hover:text-byzantium-100 transition duration-300 disabled:cursor-not-allowed disabled:text-azure-800 disabled:border-azure-800 disabled:bg-neutral-500/15
+  }
+
+  .menu-card {
+    @apply flex flex-col justify-end uppercase text-center text-2xl p-6 rounded-4xl;
+  }
+
+  .tech-icon {
+    @apply h-[90%] my-auto;
+  }
 }
 
 :root {
@@ -25,15 +107,6 @@
   height: 100%;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
   display: flex;
@@ -43,7 +116,7 @@ body {
   height: 100vh;
 }
 
-h1 {
+/* h1 {
   font-family: "Special Gothic Expanded One", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -83,4 +156,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */

@@ -1,5 +1,5 @@
 <script>
-    import ItchLogo from "../icons/ItchLogo.svelte";
+    import ItchLogo from "../icons/socials/ItchLogo.svelte";
 </script>
 
 <div class="mb-16">
