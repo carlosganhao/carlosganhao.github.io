@@ -7,7 +7,7 @@
 </script>
 
 <div class="root">
-    <Header title={"Experiments"}/>
+    <Header title={"Experiments"} {handleAnchor}/>
     <div class="grid grid-cols-2 grow mt-9 mx-12 mb-7 gap-4">
         <List title="Experiments:">
             <a class="link text-xl pl-2" href="/experiments/rockpaperscissors" onclick={handleAnchor}>P2P Rock, Paper, Scissors</a>

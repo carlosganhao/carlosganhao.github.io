@@ -1,5 +1,4 @@
 <script>
-    import { fade } from "svelte/transition";
     import ItchLogo from "../icons/socials/ItchLogo.svelte";
 
     let {backHref, handleAnchor, additionalCredits = []} = $props()

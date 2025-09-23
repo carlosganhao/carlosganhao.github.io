@@ -1,63 +1,36 @@
 <script>
     import { T, useTask, useThrelte } from "@threlte/core";
-    import { OrbitControls, HTML } from "@threlte/extras";
+    import { OrbitControls } from "@threlte/extras";
+    import { animate, eases } from "animejs";
+    import { DoubleSide, Fog, MathUtils, Quaternion, Vector3 } from "three";
     import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
-    import { Vector3, MathUtils, Quaternion, CurvePath, Fog, Points, BufferGeometry, SphereGeometry, Sphere, Mesh, MeshBasicMaterial, PlaneGeometry, DoubleSide } from "three";
-    import OverlayDOMObject from "./components/OverlayDOMObject.svelte";
-    import CounterLabel from "./components/CounterLabel.svelte";
-    import Page from "./components/Page.svelte";
-    import { animate, eases, createTimeline } from "animejs";
-    import url from "./hooks/urlStore";
-    import SmallShardFragments from "./components/SmallShardFragments.svelte";
-    import PointCould from "./components/PointCould.svelte";
+    import { EffectComposer } from "threlte-postprocessing";
+    import { BloomEffect } from "threlte-postprocessing/effects";
     import CenterCore from "./components/CenterCore.svelte";
-    import { EffectComposer } from "threlte-postprocessing"
-    import { BloomEffect, GodRaysEffect } from "threlte-postprocessing/effects"
-
+    import Page from "./components/Page.svelte";
+    import PointCould from "./components/PointCould.svelte";
+    import SmallShardFragments from "./components/SmallShardFragments.svelte";
+    import FloorTiles from "./components/FloorTiles.svelte";
+    import url from "./hooks/urlStore";
+    import { onMount } from "svelte";
     // Index Page
     import Index from "./pages/Index.svelte";
     // Gamedev Pages
+    import AcerolaJam from "./pages/gamedev/AcerolaJam.svelte";
+    import ChoppingWood from "./pages/gamedev/ChoppingWood/ChoppingWood.svelte";
+    import ChoppingWoodSprite from "./pages/gamedev/ChoppingWood/ChoppingWoodSprite.svelte";
     import Gamedev from "./pages/gamedev/Gamedev.svelte";
     import Gmtk from "./pages/gamedev/GMTK/GMTK.svelte";
     import GmtkSprite from "./pages/gamedev/GMTK/GMTKSprite.svelte";
-    import AcerolaJam from "./pages/gamedev/AcerolaJam.svelte";
     import PirateJam from "./pages/gamedev/PirateJam/PirateJam.svelte";
     import PirateJamSprite from "./pages/gamedev/PirateJam/PirateJamSprite.svelte";
-    import ChoppingWood from "./pages/gamedev/ChoppingWood/ChoppingWood.svelte";
-    import ChoppingWoodSprite from "./pages/gamedev/ChoppingWood/ChoppingWoodSprite.svelte";
     // Tooling Pages
     import Tooldev from "./pages/tooldev/Tooldev.svelte";
     import UnHierarchy from "./pages/tooldev/UnHierarchy.svelte";
     // Experiment Pages
     import Experiments from "./pages/experiments/Experiments.svelte";
-    import RockPaperScissors from "./pages/experiments/RockPaperScissors.svelte";
     import Portfolio from "./pages/experiments/Portfolio.svelte";
-    import FloorTiles from "./components/FloorTiles.svelte";
-    import { PI } from "three/src/nodes/TSL.js";
-
-    function fibonacci_sphere(n) {
-        const points = [];
-        const phi = Math.PI * (Math.sqrt(5) - 1);
-
-        for (let i = 0; i < n; i++) {
-            let y = 1 - (i / (n - 1)) * 2;
-            let radius = Math.sqrt(1 - y * y);
-
-            let theta = phi * i;
-            let x = Math.cos(theta) * radius;
-            let z = Math.sin(theta) * radius;
-
-            points.push(new Vector3(x, y, z));
-        }
-
-        return points;
-    }
-
-    function cameraPosToPage(pageContent) {
-        const cameraPos = new Vector3();
-        cameraPos.copy(pageContent.position).addScalar(defaultCameraSpacing);
-        return cameraPos;
-    }
+    import RockPaperScissors from "./pages/experiments/RockPaperScissors.svelte";
 
     let { overlayElement } = $props();
     let deltaTime;
@@ -72,8 +45,13 @@
     });
 
     $effect(() => {
+        if(initialized){
+            cameraState.ref.lookAt(0, 0, 0)
+        }
+    })
+
+    $effect(() => {
         if(!allowOrbitalControls){
-            console.log("Set Look At")
             cameraState.ref.lookAt(0, 0, 0)
         }
     })
@@ -95,43 +73,13 @@
         { before: autoRenderTask },
     );
 
-    // The CSS2DRenderer needs to be updated after the autoRenderTask, so we
-    // add a task that runs after it.
-    useTask(
-        () => {
-            // Update the DOM
-            overlayRenderer.render(scene, camera.current);
-        },
-        {
-            after: autoRenderTask,
-            autoInvalidate: false,
-        },
-    );
-
-    const params = [
-        {
-            color: "#4F6FF6",
-            label: "Hello",
-            position: [-1, 2, 1],
-        },
-        {
-            color: "#6FF64F",
-            label: "CSS",
-            position: [1, 2, 1],
-        },
-        {
-            color: "#F64F6F",
-            label: "Renderer",
-            position: [1, 2, -1],
-        },
-    ];
-
-    // const sun = new Mesh(new SphereGeometry(10), new MeshBasicMaterial())
     const pageCircleRadius = 60;
     const defaultCameraSpacing = 30;
     const cameraPanOutDistance = 30;
     const cameraRouteSpeed = 18;
 
+    let initialized = $state(false);
+    let blockPointerEvents = $state(false);
     let allowOrbitalControls = $state(false);
     let selectedPage = $state(0);
 
@@ -197,12 +145,8 @@
         ref: null,
     });
 
+    // Place pages according to fibonacci sphere positioning
     for (let i = 0; i < content.length; i++) {
-        // curPos.setFromSphericalCoords(
-        //     MathUtils.randFloat(30, 50),
-        //     MathUtils.randFloat(0, 2 * Math.PI),
-        //     MathUtils.randFloat(0, 2 * Math.PI),
-        // );
         let curPos = new Vector3();
         let curRot = new Quaternion();
         const phi = Math.acos(-1 + (2 * i) / (content.length - 1));
@@ -252,7 +196,6 @@
     cameraState.radius = content[selectedPage].radius;
     cameraState.phi = content[selectedPage].phi;
     cameraState.theta = content[selectedPage].theta;
-
     let freeCamPos = new Vector3(0, 0, 60);
 
     function calcCameraDesiredPosition()
@@ -287,6 +230,12 @@
             onRender: (self) => {
                 cameraState.ref.lookAt(0, 0, 0);
             },
+            onBegin: () => {
+                blockPointerEvents = true;
+            },
+            onComplete: () => {
+                blockPointerEvents = false;
+            }
         });
         animate(cameraState, {
             spacing: {
@@ -298,6 +247,16 @@
             alternate: true,
             ease: eases.inOutQuad,
         });
+    }
+
+    function setToPage(index) {
+        if(selectedPage == index) return;
+        selectedPage = index;
+        const curPage = content[selectedPage];
+
+        cameraState.phi = curPage.phi
+        cameraState.theta = curPage.theta
+        cameraState.ref.lookAt(0, 0, 0)
     }
 
     function handleAnchor(e) {
@@ -314,22 +273,30 @@
         }
         routeToPage(index);
     })
+
+    onMount(() => {
+        initialized = true;
+        const index = content.findIndex((x) => x.instance?.path == $url.pathname);
+        if (index == null || index == -1) {
+            console.error("No page with path", $url.pathname, "found on mount")
+            return
+        }
+        setToPage(index);
+    })
 </script>
 
 <svelte:document
     onkeypress={(e) => {
-        console.log(`Key ${e.key}`)
         if(e.key == 's') {
             allowOrbitalControls = !allowOrbitalControls
             freeCamPos = calcCameraDesiredPosition()
+            blockPointerEvents = allowOrbitalControls
         }
     }}
 />
 
-<!-- position={cameraDesiredPosition.toArray()} -->
 <EffectComposer>
     <BloomEffect intensity={0.5}/>
-    <!-- <GodRaysEffect sun={sun} /> -->
 </EffectComposer>
 
 <T.PerspectiveCamera
@@ -347,52 +314,9 @@
 
 <T.PointLight position={[0, 0, 0]} intensity={2000}/>
 
-<!-- <T.Mesh position.y={1}>
-  <T.BoxGeometry args={[2, 2, 2]} />
-  <T.MeshStandardMaterial color="#F64F6F" />
-</T.Mesh> -->
-
-{#each params as { color, label, position }}
-    <OverlayDOMObject {position} center={[0.5, 0.5]}>
-        {#snippet content()}
-            <CounterLabel {label} />
-        {/snippet}
-
-        <!-- <T.Mesh>
-      <T.SphereGeometry args={[0.25]} />
-      <T.MeshStandardMaterial {color} />
-    </T.Mesh> -->
-    </OverlayDOMObject>
-{/each}
-
-<!-- <T.Group
-  position={[0, 3, 0]}
->
-  <HTML
-    position={[0, 0, 0.055]}
-    transform
-    occlude
-  >
-    <h1>
-      Hello World
-    </h1>
-  </HTML>
-  <T.Mesh>
-    <T.BoxGeometry args={[2.8, 0.7, 0.1]} />
-    <T.MeshStandardMaterial color="#11226F" />
-  </T.Mesh>
-</T.Group> -->
-
-<!-- <Page position={[0, 0, 0]}>
-    <HeroPage />
-</Page>
-
-<Page position={[0, 0, 0]}>
-    <HeroPage />
-</Page> -->
-
 {#each content as curCont, index}
     <Page
+        interactable={!blockPointerEvents && selectedPage == index}
         position={curCont.position.toArray()}
         oncreate={(ref) => {
             const lookVector = new Vector3();
@@ -400,7 +324,6 @@
             ref.lookAt(lookVector);
         }}
     >
-        <!-- {@render page?.()} -->
         <curCont.page
             onClick={() => routeToPage((selectedPage + 1) % content.length)}
             {handleAnchor}
@@ -422,15 +345,6 @@
     <T.SphereGeometry args={[600]} />
     <T.MeshBasicMaterial color={0x242424} side={DoubleSide}/>
 </T.Mesh>
-
-<!-- <T.Mesh position={[0, -300, 0]} rotation={[Math.PI/2, 0, 0]} scale={[5000, 5000, 5000]}>
-    <T.PlaneGeometry arg={[1, 1]} />
-    <T.MeshStandardMaterial side={DoubleSide} />
-</T.Mesh> -->
     
 <FloorTiles y={-250}/>
 <FloorTiles y={250}/>
-<!-- <T.Mesh>
-    <T.SphereGeometry args={[10]} />
-    <T.MeshPhongMaterial emissiveIntensity={10} emissive={[1, 1, 1]} />
-</T.Mesh> -->

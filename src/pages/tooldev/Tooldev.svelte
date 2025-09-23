@@ -7,7 +7,7 @@
 </script>
 
 <div class="root">
-    <Header title={"Tooling"}/>
+    <Header title={"Tooling"} {handleAnchor}/>
     <div class="grid grid-cols-2 grow mt-9 mx-12 mb-7 gap-4">
         <List title="Tools Made:">
             <a class="link text-xl pl-2" href="/tooldev/unhierarchy" onclick={handleAnchor}>UnHierarchy</a>

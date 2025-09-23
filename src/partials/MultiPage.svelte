@@ -72,7 +72,7 @@
 </script>
 
 <div class="root">
-    <Header {title} />
+    <Header {title} {handleAnchor} />
     <div class="flex flex-row mx-12 mt-3 border-b-2 pb-0.5">
         <button
             class="btn size-8 p-0"

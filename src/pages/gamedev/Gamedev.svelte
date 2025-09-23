@@ -7,7 +7,7 @@
 </script>
 
 <div class="root">
-    <Header title={"Gamedev"}/>
+    <Header title={"Gamedev"} {handleAnchor}/>
     <div class="body">
         <List title="Games Made:">
             <a class="link text-xl pl-2" href="/gamedev/choppingwood" onclick={handleAnchor}>Chopping Wood</a>

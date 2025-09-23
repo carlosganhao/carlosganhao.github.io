@@ -8,18 +8,18 @@
     export const path = "/"
 
     const headerText = [
-        "Portfolio",
         "Gamedev",
         "Procedural",
         "Create",
-        "Click",
         "Experiment",
+        "Explore",
     ]
     let headerElement = null
     let writterElement = null
+    let colsElement = null;
 
     let split = $state(null)
-    let curText = $state(headerText[0])
+    let curText = $state("Portfolio")
 
     $effect(() => {
         if(curText && split?.refresh) {
@@ -35,19 +35,6 @@
             }
         })
 
-        // const externalTimeline = createTimeline({
-        //     loop: true,
-        //     onBegin: (target) => {
-        //         console.log("begin")
-        //         split.refresh()
-        //     },
-        //     onLoop: (target) => {
-        //         console.log("test")
-        //     }
-        // }).add({
-        //     duration: 1000,
-        // })
-
         split.addEffect(({chars}) => {
             const timeline = createTimeline({
                 loop: true,
@@ -55,7 +42,7 @@
                     duration: (chars.length - 1) * 100
                 },
                 onLoop: (target) => {
-                    curText = headerText[MathUtils.randInt(0, headerText.length - 1)]
+                    curText = utils.randomPick(headerText)
                 }
             })
             
@@ -107,24 +94,23 @@
     <div class="flex mt-9 mx-12 border-b-4 border-neutral-100">
         <h1 bind:this={headerElement} class="text-8xl font-header uppercase text-neutral-900 text-center">{curText}</h1>
         <span bind:this={writterElement} class={"text-8xl uppercase text-neutral-100 bg-neutral-100 py-1 px-3 opacity-0"}>_</span>
-        <!-- <h5 class="text-lg font-header lowercase text-amber-50 text-center drop-shadow-md drop-shadow-coral-400/60">creative</h5> -->
     </div>
-    <div class="grid grid-cols-3 grid-rows-1 gap-4 grow mt-7 mb-7 mx-12">
-        <a class="link menu-card bg-azure-900" href='/gamedev' onclick={handleAnchor}>
-            <p>
+    <div bind:this={colsElement} class="grid grid-cols-3 gap-4 grow mt-7 mb-7 mx-12">
+        <a class="menu-card bg-[url(bg/gamedev.png)] bg-cover bg-top" href='/gamedev' onclick={handleAnchor}>
+            <p class="menu-text">
                 Gamedev
             </p>
         </a>
-        <a class="link menu-card bg-byzantium-900" href='/tooldev' onclick={handleAnchor}>
-            <p>
+        <a class="menu-card bg-[url(bg/tooling.png)] bg-cover bg-center" href='/tooldev' onclick={handleAnchor}>
+            <p class="menu-text">
                 Tooling
             </p>
         </a>
-        <a class="link menu-card bg-avocado-800" href='/experiments' onclick={handleAnchor}>
-            <p>
+        <a class="menu-card bg-[url(bg/experiments.png)] bg-center" href='/experiments' onclick={handleAnchor}>
+            <p class="menu-text">
                 Experiments
             </p>
         </a>
     </div>
-    <p class="text-neutral-600 text-xs text-center">Made by cooli2 with svelte, threlte, tailwind & anime.js <a href="https://cooli2.itch.io/"><ItchLogo classes={"inline"}/></a></p>
+    <p class="text-neutral-600 text-xs text-center">Portfolio made by cooli2 with svelte, threlte, tailwind & anime.js <a href="https://cooli2.itch.io/"><ItchLogo classes={"inline"}/></a></p>
 </div>

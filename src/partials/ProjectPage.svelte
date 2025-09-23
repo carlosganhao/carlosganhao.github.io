@@ -7,7 +7,7 @@
 </script>
 
 <div class="root">
-    <Header title={title} />
+    <Header {title} {handleAnchor} />
     <Body {textContent} {imageContent} {imageRows} {imageCols} classes={props.class} />
     <Footer {backHref} {handleAnchor} {additionalCredits} />
 </div>
