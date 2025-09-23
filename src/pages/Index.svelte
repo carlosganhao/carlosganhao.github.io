@@ -96,17 +96,17 @@
         <span bind:this={writterElement} class={"text-8xl uppercase text-neutral-100 bg-neutral-100 py-1 px-3 opacity-0"}>_</span>
     </div>
     <div bind:this={colsElement} class="grid grid-cols-3 gap-4 grow mt-7 mb-7 mx-12">
-        <a class="menu-card bg-[url(bg/gamedev.png)] bg-cover bg-top" href='/gamedev' onclick={handleAnchor}>
+        <a class="menu-card bg-[url(/bg/gamedev.png)] bg-cover bg-top" href='/gamedev' onclick={handleAnchor}>
             <p class="menu-text">
                 Gamedev
             </p>
         </a>
-        <a class="menu-card bg-[url(bg/tooling.png)] bg-cover bg-center" href='/tooldev' onclick={handleAnchor}>
+        <a class="menu-card bg-[url(/bg/tooling.png)] bg-cover bg-center" href='/tooldev' onclick={handleAnchor}>
             <p class="menu-text">
                 Tooling
             </p>
         </a>
-        <a class="menu-card bg-[url(bg/experiments.png)] bg-center" href='/experiments' onclick={handleAnchor}>
+        <a class="menu-card bg-[url(/bg/experiments.png)] bg-center" href='/experiments' onclick={handleAnchor}>
             <p class="menu-text">
                 Experiments
             </p>
