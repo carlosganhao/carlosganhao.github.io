@@ -6,8 +6,8 @@
     import ProjectPage from "../../partials/ProjectPage.svelte";
 
     let {onClick, handleAnchor} = $props()
-    export const path = "/experiments/3dportfolio"
-    const backHref = path.substring(0, path.lastIndexOf('/'));
+    export const path = "#experiments_3dportfolio"
+    const backHref = path.substring(0, path.lastIndexOf('_'));
 </script>
 
 <ProjectPage title={"This Page"} {backHref} {handleAnchor}>
@@ -31,6 +31,5 @@
         </p>
     {/snippet}
     {#snippet imageContent()}
-        <p>Use your imagination</p>
     {/snippet}
 </ProjectPage>

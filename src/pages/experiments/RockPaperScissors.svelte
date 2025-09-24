@@ -6,8 +6,8 @@
     import ProjectPage from "../../partials/ProjectPage.svelte";
 
     let {onClick, handleAnchor} = $props()
-    export const path = "/experiments/rockpaperscissors"
-    const backHref = path.substring(0, path.lastIndexOf('/'));
+    export const path = "#experiments_rockpaperscissors"
+    const backHref = path.substring(0, path.lastIndexOf('_'));
 </script>
 
 <ProjectPage title={"P2P Rock, Paper, Scissors"} {backHref} {handleAnchor} imageContent={null} class={"grid-cols-1"}>

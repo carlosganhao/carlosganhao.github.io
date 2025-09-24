@@ -7,8 +7,8 @@
     import MultiPage from "../../partials/MultiPage.svelte";
 
     let {onClick, handleAnchor} = $props()
-    export const path = "/gamedev/acerolajam"
-    const backHref = path.substring(0, path.lastIndexOf('/'));
+    export const path = "#gamedev_acerolajam"
+    const backHref = path.substring(0, path.lastIndexOf('_'));
     let pages = [
         {
             title: "0",

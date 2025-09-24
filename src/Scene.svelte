@@ -266,9 +266,10 @@
     }
 
     url.subscribe((url) => {
-        const index = content.findIndex((x) => x.instance?.path == url.pathname);
+        if(!initialized) return;
+        const index = content.findIndex((x) => x.instance?.path == url.hash);
         if (index == null || index == -1) {
-            console.error("No page with path", url.pathname, "found")
+            console.error("No page with path", url.hash, "found")
             return
         }
         routeToPage(index);
@@ -276,9 +277,9 @@
 
     onMount(() => {
         initialized = true;
-        const index = content.findIndex((x) => x.instance?.path == $url.pathname);
+        const index = content.findIndex((x) => x.instance?.path == $url.hash);
         if (index == null || index == -1) {
-            console.error("No page with path", $url.pathname, "found on mount")
+            console.error("No page with path", $url.hash, "found on mount")
             return
         }
         setToPage(index);

@@ -6,8 +6,8 @@
     import ProjectPage from "../../partials/ProjectPage.svelte";
 
     let {onClick, handleAnchor} = $props()
-    export const path = "/tooldev/unhierarchy"
-    const backHref = path.substring(0, path.lastIndexOf('/'));
+    export const path = "#tooldev_unhierarchy"
+    const backHref = path.substring(0, path.lastIndexOf('_'));
 </script>
 
 <ProjectPage title={"UnHierarchy"} {backHref} {handleAnchor}>
