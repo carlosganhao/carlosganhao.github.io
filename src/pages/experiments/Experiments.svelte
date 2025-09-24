@@ -16,7 +16,8 @@
             <a class="link text-xl pl-2" href="#experiments_3dportfolio" onclick={handleAnchor}>This Portfolio</a>
         </List>
     </div>
-    <div class="flex mx-12 mb-5">
+    <div class="flex mx-12 mb-5 justify-between items-center">
         <a class="link-btn" href="#" onclick={handleAnchor}>Back</a>
+        <p class="text-neutral-600 text-s font-extralight">Have you tried pessing 's'?</p>
     </div>
 </div>

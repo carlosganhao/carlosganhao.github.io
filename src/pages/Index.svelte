@@ -42,7 +42,7 @@
                     duration: (chars.length - 1) * 100
                 },
                 onLoop: (target) => {
-                    curText = utils.randomPick(headerText)
+                    curText = utils.randomPick(headerText.filter(x => x != split.html))
                 }
             })
             
@@ -85,7 +85,7 @@
             })
             .init()
 
-            return timeline;
+            return () => timeline.cancel();
         })
     })
 </script>
